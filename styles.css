@@ -1,0 +1,60 @@
+/* Genel stil ayarları */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+/* Slotlar ve Rows */
+.slots {
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    gap: 10px;
+    overflow: hidden;
+}
+
+.row {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: center; /* Slotları ortala */
+}
+
+.slot {
+    width: 100px;
+    height: 100px;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 72px;
+    margin: 5px;
+}
+
+/* Kontroller ve Alt Bilgi */
+.credit, .controls, .last-win-info, .bottom-info {
+    margin-top: 20px;
+    text-align: center;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Detaylar Kısmı */
+.bottom-section {
+    display: flex;
+    justify-content: space-between;
+}
