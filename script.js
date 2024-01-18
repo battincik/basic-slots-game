@@ -1,16 +1,19 @@
 const symbols = [
-    { emoji: "🍒", rate: 0.5 },
-    { emoji: "🍇", rate: 0.75 },
-    { emoji: "🍊", rate: 1.0 },
-    { emoji: "🍋", rate: 1.5 },
-    { emoji: "🍉", rate: 2.0 },
-    { emoji: "🍎", rate: 3.0 },
-    { emoji: "🍓", rate: 4.0 },
-    { emoji: "🍌", rate: 5.0 },
-    { emoji: "🍏", rate: 10.0 },
-    { emoji: "🥭", rate: 15.0 },
-    { emoji: "🍍", rate: 20.0 },
-    { emoji: "🥝", rate: 25.0 },
+    { emoji: "🍒", rate: 0.25 },
+    { emoji: "🍇", rate: 0.5 },
+    { emoji: "🍊", rate: 0.75 },
+    { emoji: "🍋", rate: 1.0 },
+    { emoji: "🍉", rate: 1.5 },
+    { emoji: "🍎", rate: 2.0 },
+    { emoji: "🍓", rate: 2.5 },
+    { emoji: "🍌", rate: 3.0 },
+    { emoji: "🍏", rate: 5.0 },
+    { emoji: "🥭", rate: 7.5 },
+    { emoji: "🍍", rate: 10.0 },
+    { emoji: "🥝", rate: 15.0 },
+    { emoji: "🔥", rate: 20.0 },
+    { emoji: "⭐️", rate: 25.0 },
+
 ];
 
 var kredi = 500; // Kredi miktarı
