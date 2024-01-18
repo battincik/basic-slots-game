@@ -20,7 +20,6 @@ var spinning = false; // Dönme işlemi devam ediyor mu kontrol etmek için bir 
 var completedAnimations = 0; // Tamamlanan animasyonları saymak için bir değişken ekliyoruz
 var maxPastResults = 6; // En fazla gösterilecek geçmiş sonuç sayısı
 
-
 var slotResults = []; // Sonuçları saklamak için bir dizi ekliyoruz
 var pastResults = []; // Geçmiş sonuçları saklamak için bir dizi ekliyoruz
 
@@ -42,7 +41,7 @@ spinButonu.addEventListener("click", function () { // Spin düğmesine tıkland�
         return alert("Lütfen geçerli bir bahis miktarı girin."); // Bahis miktarı 0 veya daha az ise, kullanıcıya uyarı ver
     } else if (currentBet > kredi) { // Bahis miktarı, mevcut kredi miktarını aşıyorsa
         return alert("Bahis miktarı, mevcut kredi miktarını aşıyor. Lütfen geçerli bir bahis miktarı girin."); // Bahis miktarı, mevcut kredi miktarını aşıyorsa, kullanıcıya uyarı ver
-    }
+    } // Bahis miktarı 0 veya daha az ise 
     clearSlots(); // Slotları temizle
     kredi -= currentBet; // Krediden bahis miktarını çıkar
     krediAlani.textContent = kredi; // Kredi miktarını güncelle
@@ -101,15 +100,15 @@ function countEmojiOccurrences() { // Emoji sayılarını say
         emojiCounts[emoji] = (emojiCounts[emoji] || 0) + 1; // Emoji sayısını arttır
     } // Sonuçlar üzerinde döngü bitti
     return emojiCounts; // Emoji sayılarını döndür
-}
+} // Emoji sayılarını say
 
-function sortEmojiCounts(emojiCounts) {
+function sortEmojiCounts(emojiCounts) { // Sıralanmış sonuçları al
     var resultObj = {}; // Sonuçları tek bir obje olarak saklayacak nesne
     for (var emoji in emojiCounts) { // Emoji sayıları üzerinde döngü
         if (emojiCounts.hasOwnProperty(emoji)) { // Emoji sayıları üzerinde döngü
             resultObj[emoji] = emojiCounts[emoji]; // Sonuçları tek bir obje olarak sakla
         } // Emoji sayıları üzerinde döngü bitti
-    }
+    } // Emoji sayıları üzerinde döngü bitti
     var sortedResult = {}; // Sıralanmış sonuçları saklayacak nesne
     Object.keys(resultObj).sort(function (a, b) { // Sonuçları sırala
         return resultObj[b] - resultObj[a]; // Sonuçları sırala
@@ -117,9 +116,9 @@ function sortEmojiCounts(emojiCounts) {
         sortedResult[key] = resultObj[key]; // Sıralanmış sonuçları sakla
     }); // Sonuçlar üzerinde döngü bitti
     return sortedResult; // Sıralanmış sonuçları döndür
-}
+} // Sıralanmış sonuçları al
 
-function checkForSixOrMore(sortedEmojiCounts) {
+function checkForSixOrMore(sortedEmojiCounts) { // 6 veya daha fazla aynı emoji gelip gelmediğini kontrol et
     var hasSixOrMore = false; // En az 6 aynı emoji gelip gelmediğini kontrol etmek için bir değişken
     var emojiTypesWithSixOrMore = []; // 6 veya daha fazla aynı emoji içeren emoji türlerini saklamak için bir dizi
     for (var emoji in sortedEmojiCounts) { // Sıralanmış sonuçlar üzerinde döngü
@@ -129,12 +128,11 @@ function checkForSixOrMore(sortedEmojiCounts) {
         } // Sıralanmış sonuçlar üzerinde döngü bitti
     } // Sıralanmış sonuçlar üzerinde döngü bitti
     return { hasSixOrMore: hasSixOrMore, emojiTypes: emojiTypesWithSixOrMore.map(emojiObj => ({ emoji: emojiObj.emoji, count: emojiObj.count })) }; // 6 veya daha fazla aynı emoji gelip gelmediğini ve 6 veya daha fazla aynı emoji içeren türleri döndür
-}
+} // 6 veya daha fazla aynı emoji gelip gelmediğini kontrol et
 
-function calculateWinAmount(sortedEmojiCounts) {
+function calculateWinAmount(sortedEmojiCounts) { // Kazanç miktarını hesapla 
     var currentBet = parseInt(betInput.value); // Mevcut bahis değerini alıyoruz
     var totalWin = 0; // Toplam kazanç değişkeni
-
     for (var emoji in sortedEmojiCounts) { // Sıralanmış sonuçlar üzerinde döngü
         if (sortedEmojiCounts.hasOwnProperty(emoji) && sortedEmojiCounts[emoji] >= 6) { // Sıralanmış sonuçlar üzerinde döngü
             var emojiRate = symbols.find(symbol => symbol.emoji === emoji).rate; // Emoji oranını alıyoruz
@@ -143,9 +141,8 @@ function calculateWinAmount(sortedEmojiCounts) {
             totalWin += winAmount; // Toplam kazanç değişkenine ödülü ekliyoruz
         } // Sıralanmış sonuçlar üzerinde döngü bitti
     } // Sıralanmış sonuçlar üzerinde döngü bitti
-
     return totalWin; // Toplam kazanç değişkenini döndür
-}
+} // Kazanç miktarını hesapla
 
 function handleWin(totalWin, emojiTypes) { // Kazançları yönet
     kredi += totalWin; // Krediye kazançları ekle
@@ -155,9 +152,7 @@ function handleWin(totalWin, emojiTypes) { // Kazançları yönet
     addToHistory(parseInt(betInput.value), totalWin, emojiTypes); // Sonucu geçmiş sonuçlara ekle
     kazancAlani.textContent = totalWin; // Kazanç miktarını güncelle
     //console.log(emojiLocationsArray); // Konsola emoji konumlarını yaz
-}
-
-
+} // Kazançları yönet
 
 function collectResults() { // Sonuçları topla
     spinButonu.disabled = false; // Spin düğmesini etkinleştir
@@ -168,63 +163,49 @@ function collectResults() { // Sonuçları topla
     if (result.hasSixOrMore) { // 6 veya daha fazla aynı emoji gelirse
         var totalWin = calculateWinAmount(sortedEmojiCounts); // Kazanç miktarını hesapla
         handleWin(totalWin, result.emojiTypes); // Kazançları yönet
-    }
-}
+    } // 6 veya daha fazla aynı emoji gelirse
+} // Sonuçları topla
 
-function getEmojiLocations() {
+function getEmojiLocations() { // Emoji konumlarını al 
     var emojiLocations = []; // Emoji konumlarını saklamak için bir dizi ekliyoruz
     for (var i = 0; i < slotResults.length; i++) { // Sonuçlar üzerinde döngü
         var result = slotResults[i]; // Mevcut sonucu seç
         emojiLocations.push({ emoji: result.emoji, row: result.row, column: result.column }); // Emoji konumlarını diziye ekle
     } // Sonuçlar üzerinde döngü bitti
     return emojiLocations; // Emoji konumlarını döndür
-}
+} // Emoji konumlarını al
 
 decreaseButton.addEventListener("click", function () {
     var currentBet = parseInt(betInput.value); // Mevcut bahis değerini alıyoruz
     if (currentBet >= 10) { // Minimum bahis değeri 10 ise azaltabiliriz
         betInput.value = (currentBet - 5).toString(); // Bahis değerini 5 azaltıyoruz
-    }
-});
+    } // Minimum bahis değeri 10 ise azaltabiliriz
+}); // Azaltma butonuna tıklanıldığında
 
 // Artırma butonuna tıklanıldığında
 increaseButton.addEventListener("click", function () {
     var currentBet = parseInt(betInput.value); // Mevcut bahis değerini alıyoruz
     if (currentBet < kredi) { // Krediye göre maksimum bahis değerini aşıp aşmadığımızı kontrol ediyoruz
         betInput.value = (currentBet + 5).toString(); // Bahis değerini 5 artırıyoruz
-    }
-});
-
+    } // Krediye göre maksimum bahis değerini aşıp aşmadığımızı kontrol ediyoruz
+}); // Artırma butonuna tıklanıldığında
 function addToHistory(bet, totalWin, emojiTypes) {
     var historyTable = document.getElementById("history"); // Geçmiş tablosunu seçiyoruz
     var historyBody = historyTable.querySelector("tbody"); // Tablonun tbody bölümünü seçiyoruz
-
-    // Geçmiş sonuçlardan fazlaysa, en eski sonucu kaldır
-    if (pastResults.length >= maxPastResults) {
+    if (pastResults.length >= maxPastResults) { // Geçmiş sonuçlardan fazlaysa
         pastResults.shift(); // En eski sonucu kaldır
-        // Tablo üzerinden de kaldır
-        historyBody.removeChild(historyBody.firstChild);
-    }
-
-    // Yeni bir satır oluştur
-    var newRow = document.createElement("tr");
-
-    // Bet, Total Win ve Symbols sütunları oluştur
-    var betCell = document.createElement("td");
-    betCell.textContent = bet;
-    var totalWinCell = document.createElement("td");
-    totalWinCell.textContent = totalWin;
-    var symbolsCell = document.createElement("td");
-    symbolsCell.textContent = emojiTypes.map(emojiType => emojiType.emoji + "x" + emojiType.count).join(", ");
-
-    // Sütunları satıra ekle
-    newRow.appendChild(betCell);
-    newRow.appendChild(totalWinCell);
-    newRow.appendChild(symbolsCell);
-
-    // Yeni satırı tabloya ekle
-    historyBody.appendChild(newRow);
-
-    // Yeni sonucu geçmiş sonuçlara ekle
-    pastResults.push({ bet: bet, totalWin: totalWin, emojiTypes: emojiTypes });
+        historyBody.removeChild(historyBody.firstChild); // Tablodaki ilk satırı kaldır
+    } // Geçmiş sonuçlardan fazlaysa, en eski sonucu kaldır
+    var newRow = document.createElement("tr"); // Yeni bir satır oluştur
+    var betCell = document.createElement("td"); // Bet miktarını yaz
+    betCell.textContent = bet; // Bet miktarını yaz
+    var totalWinCell = document.createElement("td"); // Emoji türlerini ve sayılarını yaz
+    totalWinCell.textContent = totalWin; // Emoji türlerini ve sayılarını yaz
+    var symbolsCell = document.createElement("td"); // Emoji türlerini ve sayılarını yaz
+    symbolsCell.textContent = emojiTypes.map(emojiType => emojiType.emoji + "x" + emojiType.count).join(", "); // Emoji türlerini ve sayılarını yaz
+    newRow.appendChild(betCell); // Sütunları satıra ekle
+    newRow.appendChild(totalWinCell); // Sütunları satıra ekle
+    newRow.appendChild(symbolsCell); // Sütunları satıra ekle
+    historyBody.appendChild(newRow); // Tabloya yeni satırı ekle
+    pastResults.push({ bet: bet, totalWin: totalWin, emojiTypes: emojiTypes }); // Geçmiş sonuçlara ekle
 }
