@@ -21,11 +21,10 @@ var sonKazanc = 0; // Son kazanç miktarı
 var slotAnimationsComplete = 0; // Tamamlanan animasyonları saymak için bir değişken ekliyoruz
 var spinning = false; // Dönme işlemi devam ediyor mu kontrol etmek için bir değişken ekliyoruz
 var completedAnimations = 0; // Tamamlanan animasyonları saymak için bir değişken ekliyoruz
-var maxPastResults = 12; // En fazla gösterilecek geçmiş sonuç sayısı
+var maxPastResults = 9; // En fazla gösterilecek geçmiş sonuç sayısı
 
 var slotResults = []; // Sonuçları saklamak için bir dizi ekliyoruz
 var pastResults = []; // Geçmiş sonuçları saklamak için bir dizi ekliyoruz
-var tableResults = []; // Tablo sonuçlarını saklamak için bir dizi ekliyoruz
 
 var krediAlani = document.getElementById("current-credit"); // Kredi alanını seçiyoruz
 var kazancAlani = document.getElementById("last-win"); // Kazanç alanını seçiyoruz
@@ -206,8 +205,7 @@ document.querySelectorAll("button.btn-primary").forEach(function (button) { // A
 function addToHistory(spinNumber, kredi, bet, totalWin, emojiTypes) {
     var historyTable = document.getElementById("history"); // Geçmiş tablosunu seçiyoruz
     var historyBody = historyTable.querySelector("tbody"); // Tablonun tbody bölümünü seçiyoruz
-    if (tableResults.length >= maxPastResults) { // Geçmiş sonuçlardan fazlaysa
-        tableResults.shift(); // En eski sonucu kaldır
+    if (pastResults.length >= maxPastResults) { // Geçmiş sonuçlardan fazlaysa
         historyBody.removeChild(historyBody.firstChild); // Tablodaki ilk satırı kaldır
     } // Geçmiş sonuçlardan fazlaysa, en eski sonucu kaldır
     var newRow = document.createElement("tr"); // Yeni bir satır oluştur
@@ -227,7 +225,7 @@ function addToHistory(spinNumber, kredi, bet, totalWin, emojiTypes) {
     newRow.appendChild(totalWinCell); // Sütunları satıra ekle
     newRow.appendChild(symbolsCell); // Sütunları satıra ekle
     historyBody.appendChild(newRow); // Tabloya yeni satırı ekle
-    tableResults.push({ spinNumber: spinNumber, kredi: kredi, bet: bet, totalWin: totalWin, emojiTypes: emojiTypes }); // Geçmiş sonuçlara ekle
+    pastResults.push({ spinNumber: spinNumber, kredi: kredi, bet: bet, totalWin: totalWin, emojiTypes: emojiTypes }); // Geçmiş sonuçlara ekle
 }
 
 
