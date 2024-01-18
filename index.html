@@ -85,22 +85,28 @@
         </div>
         <divider />
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <h3 class="text-center">Kredi: <span id="current-credit"></span> $</h3>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="input-group">
                     <div class="input-group-prepend">
-                        <button class="btn btn-secondary" type="button">-5</button>
+                        <button class="btn btn-secondary" data-value="1000" type="button">-1000</button>
+                        <button class="btn btn-secondary" data-value="100" type="button">-100</button>
+                        <button class="btn btn-secondary" data-value="50" type="button">-50</button>
+                        <button class="btn btn-secondary" data-value="10" type="button">-10</button>
                     </div>
                     <input type="number" class="form-control" id="bet" placeholder="Bet" value="50" />
                     <div class="input-group-append">
-                        <button class="btn btn-success" type="button">Spin</button>
-                        <button class="btn btn-primary" type="button">+5</button>
+                        <button class="btn btn-success" id="spin" type="button">Spin</button>
+                        <button class="btn btn-primary" data-value="10" type="button">+10</button>
+                        <button class="btn btn-primary" data-value="50" type="button">+50</button>
+                        <button class="btn btn-primary" data-value="100" type="button">+100</button>
+                        <button class="btn btn-primary" tdata-value="1000" ype="button">+1000</button>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <h3 class="text-center">Son Kazanç: <span id="last-win"></span> $</h3>
             </div>
 

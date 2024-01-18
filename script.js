@@ -41,7 +41,7 @@ spinButonu.addEventListener("click", function () { // Spin düğmesine tıkland�
         return alert("Lütfen geçerli bir bahis miktarı girin."); // Bahis miktarı 0 veya daha az ise, kullanıcıya uyarı ver
     } else if (currentBet > kredi) { // Bahis miktarı, mevcut kredi miktarını aşıyorsa
         return alert("Bahis miktarı, mevcut kredi miktarını aşıyor. Lütfen geçerli bir bahis miktarı girin."); // Bahis miktarı, mevcut kredi miktarını aşıyorsa, kullanıcıya uyarı ver
-    } // Bahis miktarı 0 veya daha az ise 
+    }
     clearSlots(); // Slotları temizle
     kredi -= currentBet; // Krediden bahis miktarını çıkar
     krediAlani.textContent = kredi; // Kredi miktarını güncelle
@@ -175,20 +175,31 @@ function getEmojiLocations() { // Emoji konumlarını al
     return emojiLocations; // Emoji konumlarını döndür
 } // Emoji konumlarını al
 
-decreaseButton.addEventListener("click", function () {
-    var currentBet = parseInt(betInput.value); // Mevcut bahis değerini alıyoruz
-    if (currentBet >= 10) { // Minimum bahis değeri 10 ise azaltabiliriz
-        betInput.value = (currentBet - 5).toString(); // Bahis değerini 5 azaltıyoruz
-    } // Minimum bahis değeri 10 ise azaltabiliriz
-}); // Azaltma butonuna tıklanıldığında
+document.querySelectorAll("button.btn-secondary").forEach(function (button) { // Azaltma butonlarına tıklanıldığında
+    button.addEventListener("click", function () {
+        var decrementAmount = parseInt(button.getAttribute("data-value")); // Azaltma miktarını al
+        var currentBet = parseInt(betInput.value); // Mevcut bahis değerini al
+        if (currentBet >= decrementAmount) { // Minimum bahis değerini aşmıyorsak
+            betInput.value = (currentBet - decrementAmount).toString(); // Bahis değerini azalt
+        }
+    });
+});
 
-// Artırma butonuna tıklanıldığında
-increaseButton.addEventListener("click", function () {
-    var currentBet = parseInt(betInput.value); // Mevcut bahis değerini alıyoruz
-    if (currentBet < kredi) { // Krediye göre maksimum bahis değerini aşıp aşmadığımızı kontrol ediyoruz
-        betInput.value = (currentBet + 5).toString(); // Bahis değerini 5 artırıyoruz
-    } // Krediye göre maksimum bahis değerini aşıp aşmadığımızı kontrol ediyoruz
-}); // Artırma butonuna tıklanıldığında
+document.querySelectorAll("button.btn-primary").forEach(function (button) { // Artırma butonlarına tıklanıldığında
+    button.addEventListener("click", function () {
+        var incrementAmount = parseInt(button.getAttribute("data-value")); // Artırma miktarını al
+        var currentBet = parseInt(betInput.value); // Mevcut bahis değerini al
+        var maxBet = kredi; // Maksimum bahis miktarı krediye eşittir
+        if (currentBet < maxBet) { // Maksimum bahis değerini aşmıyorsak
+            if (currentBet + incrementAmount <= maxBet) { // Artırma miktarı eklediğimizde maksimum bahis değerini aşmıyorsa
+                betInput.value = (currentBet + incrementAmount).toString(); // Bahis değerini artır
+            } else { // Artırma miktarı eklediğimizde maksimum bahis değerini aşıyorsa
+                betInput.value = maxBet.toString(); // Bahis değerini maksimum bahis değerine eşitle
+            }
+        }
+    });
+});
+
 function addToHistory(bet, totalWin, emojiTypes) {
     var historyTable = document.getElementById("history"); // Geçmiş tablosunu seçiyoruz
     var historyBody = historyTable.querySelector("tbody"); // Tablonun tbody bölümünü seçiyoruz
