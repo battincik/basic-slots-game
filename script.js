@@ -24,8 +24,8 @@ var maxPastResults = 6; // En fazla gösterilecek geçmiş sonuç sayısı
 var slotResults = []; // Sonuçları saklamak için bir dizi ekliyoruz
 var pastResults = []; // Geçmiş sonuçları saklamak için bir dizi ekliyoruz
 
-var krediAlani = document.querySelector("h3.text-center span"); // Kredi alanını seçiyoruz
-var kazancAlani = document.querySelectorAll("h3.text-center span")[1]; // Kazanç alanını seçiyoruz
+var krediAlani = document.getElementById("current-credit"); // Kredi alanını seçiyoruz
+var kazancAlani = document.getElementById("last-win"); // Kazanç alanını seçiyoruz
 var betInput = document.getElementById("bet"); // Bet inputunu seçiyoruz
 var decreaseButton = document.querySelector("button.btn-secondary"); // Azaltma butonunu seçiyoruz
 var increaseButton = document.querySelector("button.btn-primary"); // Artırma butonunu seçiyoruz
@@ -46,7 +46,6 @@ spinButonu.addEventListener("click", function () { // Spin düğmesine tıkland�
     clearSlots(); // Slotları temizle
     kredi -= currentBet; // Krediden bahis miktarını çıkar
     krediAlani.textContent = kredi; // Kredi miktarını güncelle
-    kazancAlani.textContent = ""; // Kazanç miktarını temizle
     spinning = true; // Dönme işlemi devam ediyor
     spinButonu.disabled = true; // Spin düğmesini devre dışı bırak
     slotAnimationsComplete = 0; // Tamamlanan animasyonları sıfırla
@@ -154,8 +153,12 @@ function handleWin(totalWin, emojiTypes) { // Kazançları yönet
     //console.log("Kazanç: " + totalWin + " kredi"); // Konsola kazanç miktarını yaz
     var emojiLocationsArray = getEmojiLocations(); // Emoji konumlarını al
     addToHistory(parseInt(betInput.value), totalWin, emojiTypes); // Sonucu geçmiş sonuçlara ekle
+    kazancAlani.textContent = totalWin; // Kazanç miktarını güncelle
     //console.log(emojiLocationsArray); // Konsola emoji konumlarını yaz
 }
+
+
+
 function collectResults() { // Sonuçları topla
     spinButonu.disabled = false; // Spin düğmesini etkinleştir
     var emojiCounts = countEmojiOccurrences(); // Emoji sayılarını say
