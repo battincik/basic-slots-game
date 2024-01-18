@@ -34,6 +34,7 @@ or
 - [x] JavaScript ile oyun mantığı eklendi.
 - [x] Kazanç hesaplama ve geçmiş sonuçlar eklendi.
 - [ ] Tasarım iyileştirmeleri yapılacak
+- [ ] Mobil uyumluluk eklenecek az önce (18.01.2024 04:22 UTC+3) baktım da cok cirkin gözüküyormus
 - [ ] Ekran animasyonu bittikten sonra 6'dan fazla olan emojiler kaybolacak yerine yukarıdan yeni emojiler gelecek ve 6 veya 6dan fazla emoji olmayana kadar devam edecek.
 - [ ] oyuna ekstra sembol olarak x kaysayıları eklenecek toplam kazancın katsayısı olacak
 - [ ] 3. bir ekstra sembol olarak oyun içinde oyun olacak bu sayede direkt bir gelirle veya oyun içindeki sembollerin gelme şansına göre mini oyuna girip oyundaki çarpanları toplayıp daha yüksek çarpanları elde etme şansı kazanacaksınız
