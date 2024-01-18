@@ -4,6 +4,9 @@ Bu changelog, [basic-slots-game](https://github.com/battincik/basic-slots-game) 
 
 ## [Son Güncelleme] - 2024-01-18
 
+### Güncellendi
+- **[2024-01-18]** Versiyon 9 güncellemesi. (commit: [15a983b](https://github.com/battincik/basic-slots-game/commit/15a983b278fee904251db1fd4e9c8e1a7b4aeba1))
+
 ### Eklendi
 - **[2024-01-18]** Yeni bir TODO eklendi. (commit: [74f312ea](https://github.com/battincik/basic-slots-game/commit/74f312ea12a378220b1f99adb454fddc3d2574c2))
 
