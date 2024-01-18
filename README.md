@@ -33,6 +33,9 @@ or
 - [x] CSS ile tasarım yapıldı.
 - [x] JavaScript ile oyun mantığı eklendi.
 - [x] Kazanç hesaplama ve geçmiş sonuçlar eklendi.
+- [x] Para birimleri daha okunaklı oldu
+- [x] Ondalık biçimde oynama eklendi paranızı iyi değerlendirin (Hile yapmayın!)
+- [x] Tablo detaylandırma
 - [ ] Tasarım iyileştirmeleri yapılacak
 - [ ] Mobil uyumluluk eklenecek az önce (18.01.2024 04:22 UTC+3) baktım da cok cirkin gözüküyormus
 - [ ] Turbo Spin (Cunku neden olmasın?)
