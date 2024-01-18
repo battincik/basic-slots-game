@@ -34,12 +34,12 @@ var increaseButton = document.querySelector("button.btn-primary"); // Artırma b
 var spinButonu = document.querySelector("button.btn-success"); // Spin düğmesini seçiyoruz
 var slotRows = document.querySelectorAll(".slots .row"); // Slot satırlarını seçiyoruz
 
-krediAlani.textContent = kredi; // Kredi miktarını güncelle
-kazancAlani.textContent = sonKazanc; // Kazanç miktarını güncelle
+krediAlani.textContent = formatCurrency(kredi); // Kredi miktarını güncelle
+kazancAlani.textContent = formatCurrency(sonKazanc); // Kazanç miktarını güncelle
 
 spinButonu.addEventListener("click", function () { // Spin düğmesine tıklandığında
     if (spinning) return alert("Dönme işlemi devam ediyor, lütfen bekleyin!"); // Dönme işlemi devam ediyorsa, kullanıcıya uyarı ver
-    var currentBet = parseInt(betInput.value); // Mevcut bahis değerini alıyoruz
+    var currentBet = parseFloat(betInput.value); // Mevcut bahis değerini alıyoruz
     if (currentBet <= 0) { // Bahis miktarı 0 veya daha az ise
         return alert("Lütfen geçerli bir bahis miktarı girin."); // Bahis miktarı 0 veya daha az ise, kullanıcıya uyarı ver
     } else if (currentBet > kredi) { // Bahis miktarı, mevcut kredi miktarını aşıyorsa
@@ -47,7 +47,7 @@ spinButonu.addEventListener("click", function () { // Spin düğmesine tıkland�
     }
     clearSlots(); // Slotları temizle
     kredi -= currentBet; // Krediden bahis miktarını çıkar
-    krediAlani.textContent = kredi; // Kredi miktarını güncelle
+    krediAlani.textContent = formatCurrency(kredi); // Kredi miktarını güncelle
     spinning = true; // Dönme işlemi devam ediyor
     spinButonu.disabled = true; // Spin düğmesini devre dışı bırak
     slotAnimationsComplete = 0; // Tamamlanan animasyonları sıfırla
@@ -134,7 +134,7 @@ function checkForSixOrMore(sortedEmojiCounts) { // 6 veya daha fazla aynı emoji
 } // 6 veya daha fazla aynı emoji gelip gelmediğini kontrol et
 
 function calculateWinAmount(sortedEmojiCounts) { // Kazanç miktarını hesapla 
-    var currentBet = parseInt(betInput.value); // Mevcut bahis değerini alıyoruz
+    var currentBet = parseFloat(betInput.value); // Mevcut bahis değerini alıyoruz
     var totalWin = 0; // Toplam kazanç değişkeni
     for (var emoji in sortedEmojiCounts) { // Sıralanmış sonuçlar üzerinde döngü
         if (sortedEmojiCounts.hasOwnProperty(emoji) && sortedEmojiCounts[emoji] >= 6) { // Sıralanmış sonuçlar üzerinde döngü
@@ -148,14 +148,13 @@ function calculateWinAmount(sortedEmojiCounts) { // Kazanç miktarını hesapla
 } // Kazanç miktarını hesapla
 
 function handleWin(totalWin, emojiTypes) { // Kazançları yönet
+    var spinNumber = pastResults.length + 1; // Spin numarasını al, geçmiş sonuçlar uzunluğuna 1 eklenerek hesaplanır
+    var currentBet = parseFloat(betInput.value); // Mevcut bahis değerini alıyoruz
+    addToHistory(spinNumber, kredi, currentBet, totalWin, emojiTypes); // Sonucu geçmiş sonuçlara ekle
     kredi += totalWin; // Krediye kazançları ekle
-    krediAlani.textContent = kredi; // Kredi miktarını güncelle
-    //console.log("Kazanç: " + totalWin + " kredi"); // Konsola kazanç miktarını yaz
-    var emojiLocationsArray = getEmojiLocations(); // Emoji konumlarını al
-    addToHistory(parseInt(betInput.value), totalWin, emojiTypes); // Sonucu geçmiş sonuçlara ekle
-    kazancAlani.textContent = totalWin; // Kazanç miktarını güncelle
-    //console.log(emojiLocationsArray); // Konsola emoji konumlarını yaz
-} // Kazançları yönet
+    krediAlani.textContent = formatCurrency(kredi); // Kredi miktarını güncelle
+    kazancAlani.textContent = formatCurrency(totalWin); // Kazanç miktarını güncelle
+}
 
 function collectResults() { // Sonuçları topla
     spinButonu.disabled = false; // Spin düğmesini etkinleştir
@@ -180,8 +179,8 @@ function getEmojiLocations() { // Emoji konumlarını al
 
 document.querySelectorAll("button.btn-secondary").forEach(function (button) { // Azaltma butonlarına tıklanıldığında
     button.addEventListener("click", function () {
-        var decrementAmount = parseInt(button.getAttribute("data-value")); // Azaltma miktarını al
-        var currentBet = parseInt(betInput.value); // Mevcut bahis değerini al
+        var decrementAmount = parseFloat(button.getAttribute("data-value")); // Azaltma miktarını al
+        var currentBet = parseFloat(betInput.value); // Mevcut bahis değerini al
         if (currentBet >= decrementAmount) { // Minimum bahis değerini aşmıyorsak
             betInput.value = (currentBet - decrementAmount).toString(); // Bahis değerini azalt
         }
@@ -190,8 +189,8 @@ document.querySelectorAll("button.btn-secondary").forEach(function (button) { //
 
 document.querySelectorAll("button.btn-primary").forEach(function (button) { // Artırma butonlarına tıklanıldığında
     button.addEventListener("click", function () {
-        var incrementAmount = parseInt(button.getAttribute("data-value")); // Artırma miktarını al
-        var currentBet = parseInt(betInput.value); // Mevcut bahis değerini al
+        var incrementAmount = parseFloat(button.getAttribute("data-value")); // Artırma miktarını al
+        var currentBet = parseFloat(betInput.value); // Mevcut bahis değerini al
         var maxBet = kredi; // Maksimum bahis miktarı krediye eşittir
         if (currentBet < maxBet) { // Maksimum bahis değerini aşmıyorsak
             if (currentBet + incrementAmount <= maxBet) { // Artırma miktarı eklediğimizde maksimum bahis değerini aşmıyorsa
@@ -203,7 +202,7 @@ document.querySelectorAll("button.btn-primary").forEach(function (button) { // A
     });
 });
 
-function addToHistory(bet, totalWin, emojiTypes) {
+function addToHistory(spinNumber, kredi, bet, totalWin, emojiTypes) {
     var historyTable = document.getElementById("history"); // Geçmiş tablosunu seçiyoruz
     var historyBody = historyTable.querySelector("tbody"); // Tablonun tbody bölümünü seçiyoruz
     if (pastResults.length >= maxPastResults) { // Geçmiş sonuçlardan fazlaysa
@@ -211,15 +210,26 @@ function addToHistory(bet, totalWin, emojiTypes) {
         historyBody.removeChild(historyBody.firstChild); // Tablodaki ilk satırı kaldır
     } // Geçmiş sonuçlardan fazlaysa, en eski sonucu kaldır
     var newRow = document.createElement("tr"); // Yeni bir satır oluştur
+    var spinCell = document.createElement("td"); // Spin numarasını yaz
+    spinCell.textContent = spinNumber; // Spin numarasını yaz
+    var krediCell = document.createElement("td"); // Kredi miktarını yaz
+    krediCell.textContent = formatCurrency(kredi); // Kredi miktarını yaz
     var betCell = document.createElement("td"); // Bet miktarını yaz
-    betCell.textContent = bet; // Bet miktarını yaz
-    var totalWinCell = document.createElement("td"); // Emoji türlerini ve sayılarını yaz
-    totalWinCell.textContent = totalWin; // Emoji türlerini ve sayılarını yaz
+    betCell.textContent = formatCurrency(bet); // Bet miktarını yaz
+    var totalWinCell = document.createElement("td"); // Toplam Kazanç miktarını yaz
+    totalWinCell.textContent = formatCurrency(totalWin); // Toplam Kazanç miktarını yaz
     var symbolsCell = document.createElement("td"); // Emoji türlerini ve sayılarını yaz
     symbolsCell.textContent = emojiTypes.map(emojiType => emojiType.emoji + "x" + emojiType.count).join(", "); // Emoji türlerini ve sayılarını yaz
+    newRow.appendChild(spinCell); // Sütunları satıra ekle
+    newRow.appendChild(krediCell); // Sütunları satıra ekle
     newRow.appendChild(betCell); // Sütunları satıra ekle
     newRow.appendChild(totalWinCell); // Sütunları satıra ekle
     newRow.appendChild(symbolsCell); // Sütunları satıra ekle
     historyBody.appendChild(newRow); // Tabloya yeni satırı ekle
-    pastResults.push({ bet: bet, totalWin: totalWin, emojiTypes: emojiTypes }); // Geçmiş sonuçlara ekle
+    pastResults.push({ spinNumber: spinNumber, kredi: kredi, bet: bet, totalWin: totalWin, emojiTypes: emojiTypes }); // Geçmiş sonuçlara ekle
+}
+
+
+function formatCurrency(amount) {
+    return amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, '.').replace('.', ',') + " $";
 }
