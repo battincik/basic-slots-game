@@ -21,7 +21,7 @@ var sonKazanc = 0; // Son kazanç miktarı
 var slotAnimationsComplete = 0; // Tamamlanan animasyonları saymak için bir değişken ekliyoruz
 var spinning = false; // Dönme işlemi devam ediyor mu kontrol etmek için bir değişken ekliyoruz
 var completedAnimations = 0; // Tamamlanan animasyonları saymak için bir değişken ekliyoruz
-var maxPastResults = 6; // En fazla gösterilecek geçmiş sonuç sayısı
+var maxPastResults = 12; // En fazla gösterilecek geçmiş sonuç sayısı
 
 var slotResults = []; // Sonuçları saklamak için bir dizi ekliyoruz
 var pastResults = []; // Geçmiş sonuçları saklamak için bir dizi ekliyoruz
