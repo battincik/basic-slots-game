@@ -26,6 +26,8 @@ var maxPastResults = 9; // En fazla gösterilecek geçmiş sonuç sayısı
 var slotResults = []; // Sonuçları saklamak için bir dizi ekliyoruz
 var pastResults = []; // Geçmiş sonuçları saklamak için bir dizi ekliyoruz
 
+var columns = [[], [], [], [], [], []]
+
 var krediAlani = document.getElementById("current-credit"); // Kredi alanını seçiyoruz
 var kazancAlani = document.getElementById("last-win"); // Kazanç alanını seçiyoruz
 var betInput = document.getElementById("bet"); // Bet inputunu seçiyoruz
@@ -52,7 +54,102 @@ spinButonu.addEventListener("click", function () { // Spin düğmesine tıkland�
     spinButonu.disabled = true; // Spin düğmesini devre dışı bırak
     slotAnimationsComplete = 0; // Tamamlanan animasyonları sıfırla
     animateRows(); // Animasyonları başlat
+    fillColumns(currentBet); // Sütunları doldur
 });
+
+function fillColumns(currentBet) {
+    console.clear();
+    var allPages = [];
+    var isFinished = false;
+
+    // Her sütuna rastgele 200 emoji ekle
+    for (var i = 0; i < 2400; i++) {
+        var randomSymbol = symbols[Math.floor(Math.random() * symbols.length)]["emoji"];
+        columns[i % 6].push(randomSymbol);
+    }
+
+    do {
+        // Tüm sütunların son 6 tanesini yeni bir diziye ekle
+        var newColumns = columns.map(column => column.slice(-5));
+        updateSlots(newColumns);
+        // Ekrandaki emojileri göster (kaldırılmadan önce)
+        console.log("Ekrandaki Emojiler (Kaldırılmadan Önce):");
+        newColumns.forEach(column => console.log(column.join(" ")));
+
+        // Yukarıdakilerin elemanlarını bir diziye ekle (dizi içinde dizi olmayacak)
+        var page = [].concat(...newColumns);
+        
+        // Son sütunları ana diziden çıkar
+        columns.forEach(column => column.splice(-5, 5));
+        
+        var emojiCounts = countEmojisWithMinimumSix(page);
+        var sorted = sortEmojiCounts(emojiCounts);
+        var sixCheck = checkForSixOrMore(sorted);
+
+        console.log(sixCheck);
+        //console.log(emojiCounts);
+
+        if (!sixCheck.hasSixOrMore) {
+            var totalWin = calculateWinAmount(sorted);
+            handleWin(totalWin, sixCheck.emojiTypes);
+            isFinished = true;
+        } else {
+            // 6 veya daha fazla aynı emojiden olanları bul ve sayısını yaz
+            removeEmojisWithSixOrMore(newColumns, sorted);
+
+            // Ekrandaki emojileri göster (kaldırıldıktan sonra)
+            console.log("Ekrandaki Emojiler (Kaldırıldıktan Sonra):");
+            newColumns.forEach(column => console.log(column.join(" ")));
+
+            // newColumns dizisinde eleman sayısı 5 olmayanlara 5 olana kadar ekle
+            newColumns.forEach((column, index) => {
+                while (column.length < 5) {
+                    column.unshift(columns[index].pop());
+                }
+            });
+
+            allPages.push(newColumns);
+        }
+    } while (!isFinished);
+    updateResults(totalWin);
+    console.log(totalWin);
+}
+
+
+
+function updateSlots(newColumns) {
+    for (let i = 0; i < newColumns.length; i++) {
+        for (let j = 0; j < newColumns[i].length; j++) {
+            let slot = document.querySelector(`.slot[row-id="${j + 1}"][column-id="${i + 1}"]`);
+            if (slot) {
+                slot.textContent = newColumns[i][j];
+            }
+        }
+    }
+}
+
+function updateResults(totalWin) {
+    krediAlani.textContent = formatCurrency(kredi);
+    kazancAlani.textContent = formatCurrency(totalWin);
+}
+
+function countEmojisWithMinimumSix(page) {
+    var emojiCounts = {}; // Emoji sayılarını saklamak için bir nesne
+    for (var i = 0; i < page.length; i++) {
+        var emoji = page[i]; // Mevcut emojiyi al
+        emojiCounts[emoji] = (emojiCounts[emoji] || 0) + 1; // Emoji sayısını arttır
+    }
+
+    var emojisWithSixOrMore = {}; // 6 veya daha fazla olan emojileri saklamak için bir nesne
+    for (var emoji in emojiCounts) {
+        if (emojiCounts[emoji] >= 6) {
+            emojisWithSixOrMore[emoji] = emojiCounts[emoji]; // 6 veya daha fazla olan emojiyi ve sayısını sakla
+        }
+    }
+
+    return emojisWithSixOrMore; // 6 veya daha fazla olan emojileri ve sayılarını döndür
+}
+
 
 function clearSlots() { // Slotları temizle
     for (var i = 0; i < slotRows.length; i++) { // Tüm slot satırları üzerinde döngü
@@ -65,6 +162,7 @@ function clearSlots() { // Slotları temizle
     } // Tüm slot satırları üzerinde döngü bitti
     slotResults = []; // Sonuçları temizle
     completedAnimations = 0; // Tamamlanan animasyonları sıfırla
+    columns = [[], [], [], [], [], []]
 }
 
 function animateRows() { // Animasyonları başlat
@@ -82,7 +180,7 @@ function animateRows() { // Animasyonları başlat
                     slot.textContent = randomSymbol; // Slot içeriğini emoji ile güncelle
                     completedAnimations++; // Tamamlanan animasyonları arttır
                     if (completedAnimations === slotRows.length * slotRows[0].children.length) { // Tamamlanan animasyonlar, slot satırı sayısı ile slot sütun sayısının çarpımına eşitse
-                        console.log("Tüm animasyonlar tamamlandı"); // Konsola bilgi mesajı yaz
+                        //console.log("Tüm animasyonlar tamamlandı"); // Konsola bilgi mesajı yaz
                         setTimeout(function () { // 100ms gecikme ekleyerek işlemi biraz geciktir
                             spinning = false; // Dönme işlemi devam etmiyor
                             spinButonu.disabled = false; // Spin düğmesini etkinleştir
@@ -133,6 +231,20 @@ function checkForSixOrMore(sortedEmojiCounts) { // 6 veya daha fazla aynı emoji
     return { hasSixOrMore: hasSixOrMore, emojiTypes: emojiTypesWithSixOrMore.map(emojiObj => ({ emoji: emojiObj.emoji, count: emojiObj.count })) }; // 6 veya daha fazla aynı emoji gelip gelmediğini ve 6 veya daha fazla aynı emoji içeren türleri döndür
 } // 6 veya daha fazla aynı emoji gelip gelmediğini kontrol et
 
+function removeEmojisWithSixOrMore(newColumns, sortedEmojiCounts) {
+    const result = checkForSixOrMore(sortedEmojiCounts);
+
+    if (result.hasSixOrMore) {
+        for (const column of newColumns) {
+            for (const emojiObj of result.emojiTypes) {
+                let index;
+                while ((index = column.indexOf(emojiObj.emoji)) !== -1) {
+                    column.splice(index, 1); // Emojiyi bul ve çıkar
+                }
+            }
+        }
+    }
+}
 function calculateWinAmount(sortedEmojiCounts) { // Kazanç miktarını hesapla 
     var currentBet = parseFloat(betInput.value); // Mevcut bahis değerini alıyoruz
     var totalWin = 0; // Toplam kazanç değişkeni
@@ -161,7 +273,7 @@ function collectResults() { // Sonuçları topla
     var emojiCounts = countEmojiOccurrences(); // Emoji sayılarını say
     var sortedEmojiCounts = sortEmojiCounts(emojiCounts); // Sıralanmış sonuçları al
     var result = checkForSixOrMore(sortedEmojiCounts); // 6 veya daha fazla aynı emoji gelip gelmediğini kontrol et
-    console.log(result); // Konsola sonuçları yaz
+    //console.log(result); // Konsola sonuçları yaz
     if (result.hasSixOrMore) { // 6 veya daha fazla aynı emoji gelirse
         var totalWin = calculateWinAmount(sortedEmojiCounts); // Kazanç miktarını hesapla
         handleWin(totalWin, result.emojiTypes); // Kazançları yönet
